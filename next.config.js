@@ -2,8 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'export', // important for static export
-  basePath: '/debt-buyer-lawsuits-ma', // repo name
+  output: 'export',  // Important for static export
+  basePath: '/debt-buyer-lawsuits-ma',
+  assetPrefix: '/debt-buyer-lawsuits-ma/',
   images: {
     unoptimized: true,
   },
