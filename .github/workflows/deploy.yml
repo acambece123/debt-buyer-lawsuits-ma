@@ -2,8 +2,7 @@ name: Deploy Next.js site to GitHub Pages
 
 on:
   push:
-    branches:
-      - main  # run only when you push to main
+    branches: [ main ]
 
 jobs:
   build:
@@ -22,13 +21,23 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build
+        run: npm run build && npm run export
 
-      - name: Export static site
-        run: npm run export
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          path: out
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
